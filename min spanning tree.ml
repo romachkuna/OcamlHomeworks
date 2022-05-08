@@ -56,3 +56,51 @@ let mst graph =
                      if cycle acc shortest then mst_helper t (shortest::acc) else mst_helper t acc
 
         in mst_helper graph []
+(*-----------------------------------------------------------------------CHANGES---------------------------------------------------------*)
+
+type graph = (int * float * int) list
+
+let make_list graph = let rec helper graph acc =match graph with
+| [] -> acc
+| (x,_,y)::t -> helper t ((x,y)::acc)
+in helper graph []
+
+let successors n e =
+  List.map (fun (_, v) -> v) (List.filter (fun (u, _) -> n = u) e)
+
+let dfs graph start f =
+  let rec rdfs visited node =
+    if not (List.mem node visited) then
+      begin
+        f node;
+        let s = successors node graph in
+        List.fold_left rdfs (node::visited) s
+      end
+    else node::visited
+  in rdfs [] start
+
+let smallest lst = List.fold_left (fun (a1,f1,b1) (a2,f2,b2) ->  if f1 < f2 then (a1,f1,b1) else (a2,f2,b2)) (List.hd lst) lst
+
+let rec dupExist lst =
+let rec exist elem lst =
+  match lst with
+  | [] -> false
+  | hd::tl -> elem = hd || exist elem tl
+  in
+  match lst with
+  | [] -> false
+  | hd::tl -> (exist hd tl) || dupExist tl
+
+
+let mst graph = let j a = a::[] in
+                let rec mst_helper graph2 acc = match graph2 with
+                | [] -> acc
+                | (x,_,_)::t -> let (m,b,k) = smallest graph2 in
+                          let store = (m,b,k)::acc in
+                          let intolist = dfs (make_list store) m j in (* PROBLEM WITH INTERATION SMALLEST FUNCTION*)
+                          if dupExist intolist then mst_helper t acc else mst_helper t (store)
+                in mst_helper graph []
+
+let map = [(1,1.7,5);(1,1.2,6);(1,1.3,2);(5,1.4,4);(4,1.5,7);(2,1.1,3);(3,1.7,9);(9,1.8,10);(4,1.9,6)]
+
+let map2 = [(4, 1.9, 6); (9, 1.8, 10); (3, 1.7, 9); (2, 1.1, 3)]
