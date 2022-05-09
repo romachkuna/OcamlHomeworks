@@ -1,4 +1,16 @@
 (*node = added node | gives me back new node value *)
+(*let bfs graph = let (m,b,k) = List.hd graph in*)
+(*    let rec bfs_helper graph queue visited  =*)
+(*    let flattened = List.flatten queue in*)
+(*    let node = List.hd flattened in*)
+(*    let root_s = List.filter (fun a-> List.mem a visited) (successors node graph) in*)
+(*    let visit =  if (List.mem node flattened) then visited else node::visited in*)
+(*    let removed = List.filter (fun a -> node != a) flattened in*)
+
+(*    if dupExist removed then true else if List.length visit = List.length graph then false else bfs_helper graph (removed::[root_s]) visit*)
+(*    in bfs_helper graph [[m]] []*)
+
+
 let rec newnode graph node = match graph,node with
 | [],_ -> 0
 | (x,_,y)::t,(x2,_,y2) -> if x2 = x || x2=y then x2 else if y2=y || y2=x then y2 else newnode t node
