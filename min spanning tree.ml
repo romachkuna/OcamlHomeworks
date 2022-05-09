@@ -104,3 +104,25 @@ let mst graph = let j a = a::[] in
 let map = [(1,1.7,5);(1,1.2,6);(1,1.3,2);(5,1.4,4);(4,1.5,7);(2,1.1,3);(3,1.7,9);(9,1.8,10);(4,1.9,6)]
 
 let map2 = [(4, 1.9, 6); (9, 1.8, 10); (3, 1.7, 9); (2, 1.1, 3)]
+
+
+(* ========================================================================================================================================*)
+
+let my_function = function
+| [] -> raise Not_found
+| ((x,f,y) as k )::t -> List.fold_left
+            (fun ((a,b,c),list) (q,w,r) ->
+            if  b<= w
+            then ((a,b,c),(q,w,r)::list)
+            else ((q,w,r),(a,b,c)::list)
+
+            )
+            ((x,f,y), [])
+            t
+
+let rec extract_sort = function
+| [] -> []
+| list ->
+  let (least2, list) = my_function list
+  in
+    least2 :: extract_sort list;;
