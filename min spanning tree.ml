@@ -61,3 +61,23 @@ let rec exist elem lst =
             | [] -> acc
             | h::t -> if bfs (h::acc) then mst_helper t acc else mst_helper t (h::acc)
             in mst_helper smallest []
+(*------------------------------------------------------------uni version------------------------------------------------------------------*)
+
+type graph = (int * float * int) list
+
+let mst = function 
+  | [] -> []
+  | ((n1,_,_)::_) as g -> 
+  let rec main t visited edges =
+    if edges = [] then t else
+    let (v_to_uv, edges) = List.partition (fun (s,_,_) -> List.find_opt ((=) s) visited <> None) edges in
+    let (uv_to_v, edges) = List.partition (fun (_,_,s) -> List.find_opt ((=) s) visited <> None) edges in
+    let border_edges = v_to_uv @ (List.map (fun (s,w,d) -> d,w,s) uv_to_v) in
+    let min_e = List.fold_left (fun (ms,mw,md) (s,w,d) -> if w < mw then s,w,d else ms,mw,md) (0,infinity,0) border_edges in
+    let _,_,min_d = min_e in
+    let edges = edges @ List.filter (fun (_,_,d) -> d <> min_d) border_edges in
+    main (min_e::t) (min_d::visited) edges
+  in
+  main [] [n1] (List.filter (fun (s,_,d) -> s <> d) g)
+
+
