@@ -19,7 +19,9 @@ let rec top n (LNode(x,l,r))  = let (a,b,c) = x,l,r in
 
 let rec map  f (LNode(x,l,r)) = LNode(f x, (fun () -> map f (l ())), (fun () -> map f (r ())))
 
-let rec find p (LNode (x,l,r)) = if p x then LNode(x,l,r)
-                                else find p (LNode (x,(fun () -> find p (l ())), (fun () -> find p (r ()))))
-
-
+let find p (LNode (x,l,r)) =
+                    let rec impl k n (LNode (x,l,r)) = if n mod 2 = 1 then
+                            	if p x then LNode (x,l,r) else impl p (n-1) (l ())
+                            else
+                            	if p x then LNode (x,l,r) else impl p (n-1) (r ())
+                            in impl p 1 (LNode(x,l,r))
