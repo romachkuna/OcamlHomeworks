@@ -21,7 +21,7 @@ let rec map  f (LNode(x,l,r)) = LNode(f x, (fun () -> map f (l ())), (fun () -> 
 
 let find p (LNode (x,l,r)) =
                     let rec impl k n (LNode (x,l,r)) = if n mod 2 = 1 then
-                            	if p x then LNode (x,l,r) else impl p (n-1) (l ())
+                            	if p x then LNode (x,l,r) else impl p (n+1) (l ())
                             else
-                            	if p x then LNode (x,l,r) else impl p (n-1) (r ())
+                            	if p x then LNode (x,l,r) else impl p (n+1) (r ())
                             in impl p 1 (LNode(x,l,r))
