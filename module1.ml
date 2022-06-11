@@ -48,7 +48,9 @@ module type RationalField =
      let from_int x = (x,x)
 
      let to_string (a,b) = if b = 0 then raise (Bad_rational "Denominator can not be 0")  else
-                                "Rational Number is " ^ string_of_int a ^ " devided by " ^ string_of_int b
+                           let a1,b1 = standard_form (a,b) in
+                           if b1 = 1 then "Whole number " ^ string_of_int a1 else
+                                "Rational Number is " ^ string_of_int a1^ "/" ^ string_of_int b1
 
      let mul (a,b) (c,d) = let a1,b1 = standard_form (a,b) in let c1,d1 = standard_form (c,d) in
                            standard_form (a1*c1,b1*d1)
